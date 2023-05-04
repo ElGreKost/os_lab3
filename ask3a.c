@@ -96,7 +96,7 @@ int main(int argc, char **argv) {
 //                close(fd_P2C[i][PIPE_WRITE_END]);
 
 //                if((read(fd_P2C[i][PIPE_READ_END], &val, sizeof(int))) == sizeof(int)) {
-                (read(fd_P2C[i][PIPE_READ_END], &val, sizeof(int)))  ;;;
+                (read(fd_P2C[i][PIPE_READ_END], &val, sizeof(int)));
 
                     printf("[Child %d] [%d] Child received %d!\n", i, getpid(), val);
                     val++;

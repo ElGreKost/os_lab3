@@ -7,6 +7,8 @@
 #define PIPE_READ_END 0
 #define PIPE_WRITE_END 1
 
+void P2C_write(const int *fd, long *num);
+
 int main() {
     int fd[2];
     pid_t pid;
@@ -24,31 +26,64 @@ int main() {
         perror("fork");
         exit(EXIT_FAILURE);
     } else if (pid == 0) { // Child process
-        int val;
-        // Close unused write end of pipe
-        close(fd[PIPE_WRITE_END]);
-        // Read from pipe
-        read(fd[PIPE_READ_END], &val, sizeof(int));
-        // Increment value and print to terminal
-        val++;
-        printf("[Child] %d\n", val);
+        for (int i = 0;i < 2; ++i) {
+            int val;
+            // Close unused write end of pipe
+            close(fd[PIPE_WRITE_END]);
+            // Read from pipe
+            read(fd[PIPE_READ_END], &val, sizeof(int));
+            // Increment value and print to terminal
+            val++;
+            printf("[Child] %d\n", val);
+
+            write(fd[1], &val, sizeof(int));
+
+        }
         // Close read end of pipe
         close(fd[PIPE_READ_END]);
-        // Exit child process
-        exit(EXIT_SUCCESS);
+
     } else { // Parent process
-        int val;
-        // Close unused read end of pipe
-        close(fd[PIPE_READ_END]);
-        // Read from terminal
-        scanf("%d", &val);
-        // Write to pipe
-        write(fd[PIPE_WRITE_END], &val, sizeof(int));
-        // Close write end of pipe
-        close(fd[PIPE_WRITE_END]);
-        // Wait for child process to terminate
-        wait(NULL);
+
+
+
+        // here we read from terminal
+
+        fd_set readfds;
+
+
+        while (1) {
+
+            // setup for select
+            FD_ZERO(&readfds);
+            FD_SET(STDIN_FILENO, &readfds);
+            int max_fd = fd[1];
+            FD_SET(fd[0], &readfds);
+
+            select(max_fd + 1, &readfds, NULL, NULL, NULL);
+
+
+            if (FD_ISSET(STDIN_FILENO, &readfds)) { // reading from terminal
+                char buffer[256];
+                fgets(buffer, sizeof(buffer), stdin);
+                char *endptr;
+                long num = strtol(buffer, &endptr, 10);
+                printf("num is %ld\n", num);
+
+
+                // sending to pipe
+                P2C_write(fd, &num);
+            }
+        }
     }
 
     return 0;
+}
+
+void P2C_write(const int *fd, long *num) {// Close unused read end of pipe
+    close(fd[PIPE_READ_END]);
+    // Read from terminal
+    // Write to pipe
+    write(fd[PIPE_WRITE_END], num, sizeof(int));
+    // Close write end of pipe
+    close(fd[PIPE_WRITE_END]);
 }
