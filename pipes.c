@@ -25,24 +25,31 @@ int main() {
     if (pid < 0) { // Error
         perror("fork");
         exit(EXIT_FAILURE);
-    } else if (pid == 0) { // Child process
-        for (int i = 0;i < 2; ++i) {
+    }   else if (pid == 0) { // Child process
+        while (1) {
             int val;
+
             // Close unused write end of pipe
             close(fd[PIPE_WRITE_END]);
+
             // Read from pipe
-            read(fd[PIPE_READ_END], &val, sizeof(int));
-            // Increment value and print to terminal
-            val++;
-            printf("[Child] %d\n", val);
+            ssize_t bytes_read = read(fd[PIPE_READ_END], &val, sizeof(int));
+            if (bytes_read == -1) {
+                perror("read");
+                exit(EXIT_FAILURE);
+            }
 
-            write(fd[1], &val, sizeof(int));
-
+            if (bytes_read == sizeof(int)) {
+                // Increment value and print to terminal
+                val++;
+                printf("[Child] %d\n", val);
+            }
         }
-        // Close read end of pipe
-        close(fd[PIPE_READ_END]);
 
-    } else { // Parent process
+// Close read end of pipe
+        close(fd[PIPE_READ_END]);
+    }
+    else { // Parent process
 
 
 
@@ -80,10 +87,11 @@ int main() {
 }
 
 void P2C_write(const int *fd, long *num) {// Close unused read end of pipe
-    close(fd[PIPE_READ_END]);
+    //close(fd[PIPE_READ_END]);
     // Read from terminal
     // Write to pipe
+    printf("reached\n");
     write(fd[PIPE_WRITE_END], num, sizeof(int));
     // Close write end of pipe
-    close(fd[PIPE_WRITE_END]);
+    //close(fd[PIPE_WRITE_END]);
 }

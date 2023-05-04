@@ -70,6 +70,13 @@ build CMakeFiles/os_lab3.dir/pipes.c.o: C_COMPILER__os_lab3_Debug /home/kosits/C
   OBJECT_DIR = CMakeFiles/os_lab3.dir
   OBJECT_FILE_DIR = CMakeFiles/os_lab3.dir
 
+build CMakeFiles/os_lab3.dir/multiple_in.c.o: C_COMPILER__os_lab3_Debug /home/kosits/CLionProjects/os_lab3/multiple_in.c || cmake_object_order_depends_target_os_lab3
+  DEP_FILE = CMakeFiles/os_lab3.dir/multiple_in.c.o.d
+  FLAGS = -g -fdiagnostics-color=always -std=gnu11
+  INCLUDES = -I/home/kosits/CLionProjects/os_lab3/.
+  OBJECT_DIR = CMakeFiles/os_lab3.dir
+  OBJECT_FILE_DIR = CMakeFiles/os_lab3.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target os_lab3
@@ -78,7 +85,7 @@ build CMakeFiles/os_lab3.dir/pipes.c.o: C_COMPILER__os_lab3_Debug /home/kosits/C
 #############################################
 # Link the executable os_lab3
 
-build os_lab3: C_EXECUTABLE_LINKER__os_lab3_Debug CMakeFiles/os_lab3.dir/ask3.c.o CMakeFiles/os_lab3.dir/ask3a.c.o CMakeFiles/os_lab3.dir/pipes.c.o
+build os_lab3: C_EXECUTABLE_LINKER__os_lab3_Debug CMakeFiles/os_lab3.dir/ask3.c.o CMakeFiles/os_lab3.dir/ask3a.c.o CMakeFiles/os_lab3.dir/pipes.c.o CMakeFiles/os_lab3.dir/multiple_in.c.o
   FLAGS = -g
   OBJECT_DIR = CMakeFiles/os_lab3.dir
   POST_BUILD = :
