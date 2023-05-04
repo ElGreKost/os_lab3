@@ -6,4 +6,4 @@ set(CMAKE_C_STANDARD 11)
 include_directories(.)
 
 add_executable(os_lab3
-        ask3.c ask3a.c)
+        ask3.c ask3a.c pipes.c)
